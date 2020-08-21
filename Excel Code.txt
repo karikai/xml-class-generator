@@ -1,0 +1,82 @@
+Sub ExportSelectionAsCSV()
+    ' MS Excel 2007
+    ' Visual Basic for Applications
+    '
+    ' Copies the selected rows & columns
+    ' to a new Excel Workbook. Saves the new
+    ' Workbook as Comma Separated Value (text) file.
+    '
+    ' The active workbook (the 'invoking' workbook - the
+    ' one that is active when this subroutine is called)
+    ' is unaffected.
+    '
+    ' Before returning from the subroutine, the invoking workbook
+    ' is "set back to" (restored as) the active workbook.
+    '
+    ' Note: target filename is hard coded (code is simpler that way)
+
+    ' Suspends screen updating (until ready to return)
+    ' Warning: ScreenUpdating MUST be re-enabled before
+    ' returning from this subroutine.
+    '
+    ' Note: Step through this subroutine line-by-line to prove
+    ' to yourself that it is performing as promised.
+    ' (Please step through the code at least once - use F8)
+    Application.ScreenUpdating = False
+
+    ' Gets the name of *this (the invoking) workbook
+    ' so *this workbook can again be set active
+    ' at the end of this subroutine.
+    Dim CurrentFileName As String
+    CurrentFileName = ActiveWorkbook.Name
+    Debug.Print "Active File: " + CurrentFileName
+
+    ' Copies the selected cells (to the clipboard).
+    ' Precondition: Cells must be selected before
+    ' calling this subroutine.
+    Selection.Copy
+
+    ' Instantiates a (new) object instance of type Excel workbook.
+    ' Side-effect: The new workbook instance is now
+    ' the 'active' workbook.
+    Workbooks.Add Template:="Workbook"
+    ClassFileName = Application.GetSaveAsFilename + "csv"
+
+    ' Selects the first cell of the
+    ' first worksheet of the new workbook.
+    Range("A1").Select
+    
+    ' Pastes the clipboard contents to the new worksheet
+    ' (of the new workbook)
+    ActiveWorkbook.ActiveSheet.Paste
+
+    ' Writes the new (active) Excel workbook to file.
+    ' The format is Comma Separated Value
+    ActiveWorkbook.SaveAs _
+    Filename:=ClassFileName, _
+    FileFormat:=xlCSV, _
+    CreateBackup:=False
+
+    ' Gets the filename of the new (active) workbook
+    ' so the name can be logged.
+    Dim NewFileName As String
+    NewFileName = ActiveWorkbook.Name
+    Debug.Print "Active File: " + NewFileName
+
+    ' Closes the new CSV file
+    Application.DisplayAlerts = False
+    ActiveWorkbook.Close
+    Application.DisplayAlerts = True
+
+    ' Clears the clipboard contents.
+    Application.CutCopyMode = False
+
+    ' Restores the invoking workbook as the active
+    ' Excel workbook.
+    Workbooks(CurrentFileName).Activate
+    Range("A1").Select
+
+    ' Re-Enables Excel screen display.
+    Application.ScreenUpdating = True
+End Sub
+
