@@ -44,7 +44,10 @@ function prepareClassFile() {
     let idx = 0;
 
     inputFields.forEach(element => {
-        if (idx === 0 && element.dataType === 'ID') {
+        console.log(idx)
+        console.log(element.propertyName)
+        console.log(idx === 0 && element.propertyName === 'ID')
+        if (idx === 0 && element.propertyName === 'ID') {
 			classCode += '  ID: ' + element.dataType + ';\n';
 		} else {
 			lowercaseProp = element.propertyName.charAt(0).toLowerCase() + element.propertyName.slice(1);
@@ -62,7 +65,7 @@ function prepareClassFile() {
     idx = 0;
 
     inputFields.forEach(element => {
-        if (idx === 0 && element.dataType === 'ID') {
+        if (idx === 0 && element.propertyName === 'ID') {
             classCode += '    ' + lowercase + '.ID = tempObject.ID;\n';
 		} else {
 			lowercaseProp = element.propertyName.charAt(0).toLowerCase() + element.propertyName.slice(1);
