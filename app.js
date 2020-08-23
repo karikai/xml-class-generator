@@ -41,9 +41,16 @@ function prepareClassFile() {
 
     // List Properties
 
+    let idx = 0;
+
     inputFields.forEach(element => {
-		lowercaseProp = element.propertyName.charAt(0).toLowerCase() + element.propertyName.slice(1);
-        classCode += '  ' + lowercaseProp + ': ' + element.dataType + ';\n';
+        if (idx === 0 && element.dataType === 'ID') {
+			classCode += '  ID: ' + element.dataType + ';\n';
+		} else {
+			lowercaseProp = element.propertyName.charAt(0).toLowerCase() + element.propertyName.slice(1);
+            classCode += '  ' + lowercaseProp + ': ' + element.dataType + ';\n';
+        }
+        idx ++;
     });
 
     // Create to Object Function
@@ -52,10 +59,17 @@ function prepareClassFile() {
     classCode += '  static objectTo' + uppercase + '(tempObject): ' + uppercase + ' {\n';
     classCode += '    const ' + lowercase + ' = new ' + uppercase + '();\n\n';
 
+    idx = 0;
+
     inputFields.forEach(element => {
-        lowercaseProp = element.propertyName.charAt(0).toLowerCase() + element.propertyName.slice(1);
-        uppercaseProp = element.propertyName.charAt(0).toUpperCase() + element.propertyName.slice(1);
-        classCode += '    ' + lowercase + '.' + lowercaseProp + ' = tempObject.' + lowercaseProp + ';\n';
+        if (idx === 0 && element.dataType === 'ID') {
+            classCode += '    ' + lowercase + '.ID = tempObject.ID;\n';
+		} else {
+			lowercaseProp = element.propertyName.charAt(0).toLowerCase() + element.propertyName.slice(1);
+            uppercaseProp = element.propertyName.charAt(0).toUpperCase() + element.propertyName.slice(1);
+            classCode += '    ' + lowercase + '.' + lowercaseProp + ' = tempObject.' + lowercaseProp + ';\n';
+        }
+        idx ++;
     });
 
     classCode += '    return ' + lowercase + ';\n';
