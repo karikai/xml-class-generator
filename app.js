@@ -34,13 +34,35 @@ getInputFiles().then((files) => {
 })
 
 function prepareClassFile() {
+    lowercase = selectedFile.charAt(0).toLowerCase() + selectedFile.slice(1);
+    uppercase = selectedFile.charAt(0).toUpperCase() + selectedFile.slice(1);
+
     classCode = 'export class ' + selectedFile + ' {\n';
 
-    inputFields.forEach(element => {
-        classCode += '  ' + element.propertyName + ': ' + element.dataType + ' \n';
+    // List Properties
+
+    inputFields.forEach(element,idx => {
+		lowercaseProp = element.propertyName.charAt(0).toLowerCase() + element.propertyName.slice(1);
+		//classCode += '  ID: ' + element.dataType + ';\n';
+        classCode += '  ' + lowercaseProp + ': ' + element.dataType + ';\n';
     });
-    
-    classCode += '}';
+
+    // Create to Object Function
+
+    classCode += '\n'
+    classCode += '  static objectTo' + uppercase + '(tempObject): ' + uppercase + ' {\n';
+    classCode += '    const ' + lowercase + ' = new ' + uppercase + '();\n\n';
+
+    inputFields.forEach(element => {
+        lowercaseProp = element.propertyName.charAt(0).toLowerCase() + element.propertyName.slice(1);
+        uppercaseProp = element.propertyName.charAt(0).toUpperCase() + element.propertyName.slice(1);
+        classCode += '    ' + lowercase + '.' + lowercaseProp + ' = tempObject.' + lowercaseProp + ';\n';
+    });
+
+    classCode += '    return ' + lowercase + ';\n';
+
+    classCode += '  }\n\n';
+    classCode += '}\n';
 }
 
 function parseFieldData() {
