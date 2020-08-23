@@ -41,9 +41,8 @@ function prepareClassFile() {
 
     // List Properties
 
-    inputFields.forEach(element,idx => {
+    inputFields.forEach(element => {
 		lowercaseProp = element.propertyName.charAt(0).toLowerCase() + element.propertyName.slice(1);
-		//classCode += '  ID: ' + element.dataType + ';\n';
         classCode += '  ' + lowercaseProp + ': ' + element.dataType + ';\n';
     });
 
